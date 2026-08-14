@@ -2,15 +2,28 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public float speed = 5f;
+
+    private Rigidbody rb;
+    private Vector3 movement;
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        movement.x = Input.GetAxisRaw("Horizontal");
+        movement.z = Input.GetAxisRaw("Vertical");
+
+        movement = movement.normalized;
+    }
+
+    void FixedUpdate()
+    {
+        rb.MovePosition(
+            rb.position + movement * speed * Time.fixedDeltaTime
+        );
     }
 }
