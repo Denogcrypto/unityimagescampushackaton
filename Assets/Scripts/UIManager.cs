@@ -43,6 +43,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Text gameOverLabel;
     [SerializeField] private GameObject victoryPanel;
     [SerializeField] private Text victoryLabel;
+    [SerializeField] private Button[] restartButtons; // on GameOverPanel / VictoryPanel
 
     // ─── Animation lock ──────────────────────────────────────────
     private bool waitingForAnimation = false;
@@ -56,6 +57,9 @@ public class UIManager : MonoBehaviour
         gm.OnDayStarted.AddListener(OnDayStarted);
         gm.OnGameOver.AddListener(ShowGameOver);
         gm.OnVictory.AddListener(ShowVictory);
+
+        foreach (var btn in restartButtons)
+            btn?.onClick.AddListener(RestartGame);
 
         // Initial state
         ShowMainMenu();
