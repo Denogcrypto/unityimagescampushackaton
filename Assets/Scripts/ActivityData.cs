@@ -13,11 +13,11 @@ public class ActivityData : ScriptableObject
 
     [Header("Energy Cost")]
     [SerializeField] private float energyCostBase;       // when willing
-    // energyCostBase * 1.5f when NOT willing (fatigue >= threshold)
+    [SerializeField] private float energyCostUnwilling;  // when NOT willing (fatigue >= threshold)
 
     [Header("Mood Delta")]
-    [SerializeField] private float moodDeltaBase;        // when willing
-    // moodDeltaBase * 0.4f when NOT willing
+    [SerializeField] private float moodDeltaBase;         // when willing (positive)
+    [SerializeField] private float moodDeltaUnwilling;     // when NOT willing (negative — the only source of mood decay)
 
     [Header("Fatigue")]
     [SerializeField] private float fatiguePerUse = 30f;
@@ -26,24 +26,28 @@ public class ActivityData : ScriptableObject
 
     [Header("Special (Descansar only)")]
     [SerializeField] private bool isRestActivity = false;
-    [SerializeField] private float restEnergyRecovery = 20f;     // energy gained
-    [SerializeField] private float restMoodPenaltyConsecutive = -3f; // applied if used 2 days in a row
 
-    [Header("Visuals")]
+    [Header("Presentation")]
     [SerializeField] private Sprite activityIcon;
+    [SerializeField] private string animationTrigger;
+    [SerializeField] private AudioClip sfx;
+    [SerializeField] [TextArea] private string flavorText;   // suggests the "place" without navigation
     [SerializeField] [TextArea] private string displayDescription;
 
     public string ActivityName { get => activityName; set => activityName = value; }
     public ActivityCategory Category { get => category; set => category = value; }
     public RiskTier RiskTier { get => riskTier; set => riskTier = value; }
     public float EnergyCostBase { get => energyCostBase; set => energyCostBase = value; }
+    public float EnergyCostUnwilling { get => energyCostUnwilling; set => energyCostUnwilling = value; }
     public float MoodDeltaBase { get => moodDeltaBase; set => moodDeltaBase = value; }
+    public float MoodDeltaUnwilling { get => moodDeltaUnwilling; set => moodDeltaUnwilling = value; }
     public float FatiguePerUse { get => fatiguePerUse; set => fatiguePerUse = value; }
     public float FatigueRecoveryPerDay { get => fatigueRecoveryPerDay; set => fatigueRecoveryPerDay = value; }
     public float FatigueThreshold { get => fatigueThreshold; set => fatigueThreshold = value; }
     public bool IsRestActivity { get => isRestActivity; set => isRestActivity = value; }
-    public float RestEnergyRecovery { get => restEnergyRecovery; set => restEnergyRecovery = value; }
-    public float RestMoodPenaltyConsecutive { get => restMoodPenaltyConsecutive; set => restMoodPenaltyConsecutive = value; }
     public Sprite ActivityIcon { get => activityIcon; set => activityIcon = value; }
+    public string AnimationTrigger { get => animationTrigger; set => animationTrigger = value; }
+    public AudioClip Sfx { get => sfx; set => sfx = value; }
+    public string FlavorText { get => flavorText; set => flavorText = value; }
     public string DisplayDescription { get => displayDescription; set => displayDescription = value; }
 }

@@ -16,12 +16,15 @@ MonoBehaviour:
   category: 0
   riskTier: 0
   energyCostBase: 15
+  energyCostUnwilling: 23
   moodDeltaBase: 6
+  moodDeltaUnwilling: -4
   fatiguePerUse: 30
   fatigueRecoveryPerDay: 15
   fatigueThreshold: 60
   isRestActivity: 0
-  restEnergyRecovery: 20
-  restMoodPenaltyConsecutive: -3
   activityIcon: {fileID: 0}
+  animationTrigger: 
+  sfx: {fileID: 0}
+  flavorText: 
   displayDescription: "Bajo impacto \xB7 Lento pero seguro"

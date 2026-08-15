@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
 
     // ─── Config ──────────────────────────────────────────────────
     [Header("Day Settings")]
-    [SerializeField] private int totalDays = 30;
+    [SerializeField] private int totalDays = 15;
 
     [Header("Mood Settings")]
     [Range(0, 100)] [SerializeField] private float moodInitial = 50f;
@@ -17,10 +17,14 @@ public class GameManager : MonoBehaviour
     [Range(0, 100)] [SerializeField] private float moodSafeMax = 75f;
     [SerializeField] private float moodFluctuationMin = -8f;
     [SerializeField] private float moodFluctuationMax = 8f;
+    [SerializeField] private float moodFluctuationAmplitudeEnd = 15f; // amplitude on the last day, interpolated from moodFluctuationMax
 
     [Header("Energy Settings")]
     [SerializeField] private float energyRecoveryMin = 40f;
     [SerializeField] private float energyRecoveryMax = 100f;
+
+    [Header("Rest Settings")]
+    [SerializeField] private float restPenaltyPerEnergyUnit = 0.1f; // -1 mood per 10 leftover energy when resting
 
     [Header("Defeat Condition")]
     [SerializeField] private int maxUnstableDays = 3;
@@ -32,6 +36,13 @@ public class GameManager : MonoBehaviour
     public float MoodSafeMin => moodSafeMin;
     public float MoodSafeMax => moodSafeMax;
     public int MaxUnstableDays => maxUnstableDays;
+    public bool DisableRandomFluctuation => disableRandomFluctuation;
+    public int LowImpactCount => lowImpactCount;
+    public int HighImpactCount => highImpactCount;
+    public GameOverReason LastGameOverReason { get; private set; }
+
+    public enum GameOverReason { TooSad, TooHappy }
+    public enum PlayArchetype { Stabilizer, Adaptive, ShockSpecialist }
 
     // ─── Runtime State ───────────────────────────────────────────
     public int CurrentDay { get; private set; } = 1;
@@ -44,12 +55,15 @@ public class GameManager : MonoBehaviour
     // Fatigue per activity: key = activity name
     private Dictionary<string, float> fatigueMap = new Dictionary<string, float>();
 
-    // Track rest used yesterday (for consecutive penalty)
-    private bool restUsedYesterday = false;
-    private bool restUsedToday = false;
-
     // Activities used this day (for fatigue accumulation)
     private HashSet<string> activitiesUsedToday = new HashSet<string>();
+
+    // Archetype tracking (S11): counts of low/high impact activities used across the run
+    private int lowImpactCount = 0;
+    private int highImpactCount = 0;
+
+    // Debug toggle: disables random mood fluctuation at the start of each day
+    private bool disableRandomFluctuation = false;
 
     // ─── Events ──────────────────────────────────────────────────
     [SerializeField] private UnityEvent onDayStarted = new UnityEvent();
@@ -81,8 +95,23 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Mood = moodInitial;
-        Energy = Random.Range(energyRecoveryMin, energyRecoveryMax);
-        Energy = Mathf.Clamp(Energy, 0f, 100f);
+        BeginDay();
+    }
+
+    /// Rolls energy and mood fluctuation for the current day and emits the day-started events.
+    /// Shared by Start() (day 1) and AdvanceDay()/Debug_JumpToDay() (subsequent days).
+    void BeginDay()
+    {
+        Energy = Mathf.Clamp(Random.Range(energyRecoveryMin, energyRecoveryMax), 0f, 100f);
+
+        if (!disableRandomFluctuation)
+        {
+            float progress = totalDays > 1 ? (float)(CurrentDay - 1) / (totalDays - 1) : 0f;
+            float amplitude = Mathf.Lerp(moodFluctuationMax, moodFluctuationAmplitudeEnd, Mathf.Clamp01(progress));
+            float fluctuation = Random.Range(-amplitude, amplitude);
+            Mood = Mathf.Clamp(Mood + fluctuation, 0f, 100f);
+        }
+
         OnDayStarted.Invoke();
         OnStatsChanged.Invoke();
     }
@@ -108,19 +137,16 @@ public class GameManager : MonoBehaviour
     {
         if (activity == null) return 0f;
         if (activity.IsRestActivity) return 0f;
-        float cost = activity.EnergyCostBase;
-        if (IsNotWilling(activity)) cost *= 1.5f;
-        return cost;
+        return IsNotWilling(activity) ? activity.EnergyCostUnwilling : activity.EnergyCostBase;
     }
 
-    /// Effective mood delta considering willingness.
+    /// Effective mood delta considering willingness. Negative when the activity is done
+    /// without willingness — this is the game's only source of controlled mood decay.
     public float GetEffectiveMoodDelta(ActivityData activity)
     {
         if (activity == null) return 0f;
         if (activity.IsRestActivity) return 0f;
-        float delta = activity.MoodDeltaBase;
-        if (IsNotWilling(activity)) delta *= 0.4f;
-        return delta;
+        return IsNotWilling(activity) ? activity.MoodDeltaUnwilling : activity.MoodDeltaBase;
     }
 
     /// True if the player can afford the energy cost.
@@ -139,14 +165,10 @@ public class GameManager : MonoBehaviour
 
         if (activity.IsRestActivity)
         {
-            // Descansar: recover energy, end the day
-            float moodChange = 0f;
-            if (restUsedYesterday) moodChange = activity.RestMoodPenaltyConsecutive;
+            // Descansar: penalize leftover unspent energy, end the day
+            float penalty = Mathf.Floor(Energy * restPenaltyPerEnergyUnit);
+            Mood = Mathf.Clamp(Mood - penalty, 0f, 100f);
 
-            Energy = Mathf.Clamp(Energy + activity.RestEnergyRecovery, 0f, 100f);
-            Mood = Mathf.Clamp(Mood + moodChange, 0f, 100f);
-
-            restUsedToday = true;
             OnActivityApplied.Invoke();
             OnStatsChanged.Invoke();
             AdvanceDay();
@@ -168,6 +190,10 @@ public class GameManager : MonoBehaviour
             fatigueMap[activity.ActivityName] + activity.FatiguePerUse, 100f);
 
         activitiesUsedToday.Add(activity.ActivityName);
+
+        // Archetype tracking (S11)
+        if (activity.RiskTier == RiskTier.High) highImpactCount++;
+        else lowImpactCount++;
 
         OnActivityApplied.Invoke();
         OnStatsChanged.Invoke();
@@ -196,6 +222,7 @@ public class GameManager : MonoBehaviour
         if (UnstableDaysStreak >= maxUnstableDays)
         {
             IsGameOver = true;
+            LastGameOverReason = Mood < moodSafeMin ? GameOverReason.TooSad : GameOverReason.TooHappy;
             OnGameOver.Invoke();
             return;
         }
@@ -223,23 +250,23 @@ public class GameManager : MonoBehaviour
         }
 
         activitiesUsedToday.Clear();
-        restUsedYesterday = restUsedToday;
-        restUsedToday = false;
+        BeginDay();
+    }
 
-        // Energy recovery
-        float recoveredEnergy = Random.Range(energyRecoveryMin, energyRecoveryMax);
-        Energy = Mathf.Clamp(recoveredEnergy, 0f, 100f);
+    /// Returns the play archetype based on the low/high impact activity ratio (S11).
+    public PlayArchetype GetArchetype()
+    {
+        int total = lowImpactCount + highImpactCount;
+        if (total == 0) return PlayArchetype.Adaptive;
 
-        // Mood fluctuation
-        float fluctuation = Random.Range(moodFluctuationMin, moodFluctuationMax);
-        Mood = Mathf.Clamp(Mood + fluctuation, 0f, 100f);
-
-        OnDayStarted.Invoke();
-        OnStatsChanged.Invoke();
+        float ratio = (float)highImpactCount / total;
+        if (ratio < 0.25f) return PlayArchetype.Stabilizer;
+        if (ratio > 0.55f) return PlayArchetype.ShockSpecialist;
+        return PlayArchetype.Adaptive;
     }
 
     // ─── Debug Helpers ───────────────────────────────────────────
-#if UNITY_EDITOR
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
     [ContextMenu("Debug: +10 Mood")]
     public void Debug_AddMood() { Mood = Mathf.Clamp(Mood + 10f, 0f, 100f); OnStatsChanged.Invoke(); }
 
@@ -260,5 +287,23 @@ public class GameManager : MonoBehaviour
 
     [ContextMenu("Debug: Force Mood to 90 (above safe zone)")]
     public void Debug_MoodOverhappy() { Mood = 90f; OnStatsChanged.Invoke(); }
+
+    /// Jumps directly to a given day: rerolls energy and mood fluctuation without
+    /// stepping through every day in between. Does not reset fatigue.
+    public void Debug_JumpToDay(int day)
+    {
+        CurrentDay = Mathf.Clamp(day, 1, totalDays);
+        activitiesUsedToday.Clear();
+        BeginDay();
+    }
+
+    public void Debug_ResetFatigue()
+    {
+        var keys = new List<string>(fatigueMap.Keys);
+        foreach (var key in keys) fatigueMap[key] = 0f;
+        OnStatsChanged.Invoke();
+    }
+
+    public void Debug_ToggleFluctuation() { disableRandomFluctuation = !disableRandomFluctuation; }
 #endif
 }
