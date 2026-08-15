@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49665c30c54891847a4a906c61b46c0f, type: 3}
+  m_Name: Leer
+  m_EditorClassIdentifier: Assembly-CSharp::ActivityData
+  activityName: Leer
+  category: 0
+  riskTier: 0
+  energyCostBase: 15
+  moodDeltaBase: 6
+  fatiguePerUse: 30
+  fatigueRecoveryPerDay: 15
+  fatigueThreshold: 60
+  isRestActivity: 0
+  restEnergyRecovery: 20
+  restMoodPenaltyConsecutive: -3
+  activityIcon: {fileID: 0}
+  displayDescription: "Bajo impacto \xB7 Lento pero seguro"

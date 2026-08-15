@@ -256,6 +256,127 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &719993419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 719993421}
+  - component: {fileID: 719993420}
+  m_Layer: 0
+  m_Name: DebugPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &719993420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719993419}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8957961ecb6f884dbe4c96e978af332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DebugPanel
+--- !u!4 &719993421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719993419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.61185, y: 6.9051, z: 14.11702}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &965721105
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 965721106}
+  - component: {fileID: 965721107}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &965721106
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965721105}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.61185, y: 6.9051, z: 14.11702}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &965721107
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965721105}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e35a894fa4f5174fa983b4e1d0e6b00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  totalDays: 30
+  moodInitial: 50
+  moodSafeMin: 30
+  moodSafeMax: 75
+  moodFluctuationMin: -8
+  moodFluctuationMax: 8
+  energyRecoveryMin: 40
+  energyRecoveryMax: 100
+  maxUnstableDays: 3
+  allActivities:
+  - {fileID: 11400000, guid: 0d24d6785bfd42640aae52fa760e3913, type: 2}
+  - {fileID: 11400000, guid: 9ff9c8481c35d654d9d22c16aee853f6, type: 2}
+  - {fileID: 11400000, guid: 94d944f0915f32b4f88709100747cd88, type: 2}
+  - {fileID: 11400000, guid: 3e83c0361eb4ba245a0ed73528f4903d, type: 2}
+  - {fileID: 11400000, guid: 162e895d5c9c7814daf42cfd7163b3dc, type: 2}
+  OnDayStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDayEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  OnActivityApplied:
+    m_PersistentCalls:
+      m_Calls: []
+  OnGameOver:
+    m_PersistentCalls:
+      m_Calls: []
+  OnVictory:
+    m_PersistentCalls:
+      m_Calls: []
+  OnStatsChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1301605136
 GameObject:
   m_ObjectHideFlags: 0
@@ -660,3 +781,5 @@ SceneRoots:
   - {fileID: 2138635089}
   - {fileID: 1301605140}
   - {fileID: 1794155819}
+  - {fileID: 965721106}
+  - {fileID: 719993421}
