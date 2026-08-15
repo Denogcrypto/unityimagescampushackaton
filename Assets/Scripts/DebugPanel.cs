@@ -53,7 +53,7 @@ public class DebugPanel : MonoBehaviour
         float gap = 8f;
 
         // Status
-        GUI.Label(new Rect(x, y, w - 20, 30), $"Día: {gm.CurrentDay}/{gm.totalDays}", boxStyle);
+        GUI.Label(new Rect(x, y, w - 20, 30), $"Día: {gm.CurrentDay}/{gm.TotalDays}", boxStyle);
         y += 30;
         GUI.Label(new Rect(x, y, w - 20, 30), $"Ánimo: {gm.Mood:F1}", boxStyle);
         y += 30;

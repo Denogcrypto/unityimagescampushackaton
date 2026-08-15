@@ -46,13 +46,13 @@ public static class ActivityDataGenerator
 
         // Descansar (special)
         var rest = ScriptableObject.CreateInstance<ActivityData>();
-        rest.activityName = "Descansar";
-        rest.category = ActivityCategory.Special;
-        rest.riskTier = RiskTier.Low;
-        rest.isRestActivity = true;
-        rest.restEnergyRecovery = 20f;
-        rest.restMoodPenaltyConsecutive = -3f;
-        rest.displayDescription = "Especial · Recupera +20 energía y termina el día. Penalización si se usa 2 días seguidos.";
+        rest.ActivityName = "Descansar";
+        rest.Category = ActivityCategory.Special;
+        rest.RiskTier = RiskTier.Low;
+        rest.IsRestActivity = true;
+        rest.RestEnergyRecovery = 20f;
+        rest.RestMoodPenaltyConsecutive = -3f;
+        rest.DisplayDescription = "Especial · Recupera +20 energía y termina el día. Penalización si se usa 2 días seguidos.";
         SaveAsset(rest, "Descansar");
 
         AssetDatabase.SaveAssets();
@@ -67,15 +67,15 @@ public static class ActivityDataGenerator
         string description)
     {
         var asset = ScriptableObject.CreateInstance<ActivityData>();
-        asset.activityName = name;
-        asset.category = category;
-        asset.riskTier = risk;
-        asset.energyCostBase = energyCost;
-        asset.moodDeltaBase = moodDelta;
-        asset.fatiguePerUse = fatiguePerUse;
-        asset.fatigueRecoveryPerDay = fatigueRecovery;
-        asset.fatigueThreshold = threshold;
-        asset.displayDescription = description;
+        asset.ActivityName = name;
+        asset.Category = category;
+        asset.RiskTier = risk;
+        asset.EnergyCostBase = energyCost;
+        asset.MoodDeltaBase = moodDelta;
+        asset.FatiguePerUse = fatiguePerUse;
+        asset.FatigueRecoveryPerDay = fatigueRecovery;
+        asset.FatigueThreshold = threshold;
+        asset.DisplayDescription = description;
         SaveAsset(asset, name.Replace(" ", "_"));
     }
 

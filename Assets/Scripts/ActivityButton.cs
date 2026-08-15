@@ -8,17 +8,17 @@ using UnityEngine.UI;
 public class ActivityButton : MonoBehaviour
 {
     [Header("Data")]
-    public ActivityData activity;
+    [SerializeField] private ActivityData activity;
 
     [Header("UI Elements")]
-    public Text nameLabel;
-    public Text costLabel;        // "⚡ 15"  or  "⚡ 23 (no disp.)"
-    public Text moodDeltaLabel;   // "+6"  or  "+2"
-    public Image riskTierIcon;              // swap sprite based on tier
-    public Sprite lowRiskSprite;
-    public Sprite highRiskSprite;
-    public Image notWillingOverlay;         // semi-transparent tint when fatigued
-    public Button button;
+    [SerializeField] private Text nameLabel;
+    [SerializeField] private Text costLabel;        // "⚡ 15"  or  "⚡ 23 (no disp.)"
+    [SerializeField] private Text moodDeltaLabel;   // "+6"  or  "+2"
+    [SerializeField] private Image riskTierIcon;              // swap sprite based on tier
+    [SerializeField] private Sprite lowRiskSprite;
+    [SerializeField] private Sprite highRiskSprite;
+    [SerializeField] private Image notWillingOverlay;         // semi-transparent tint when fatigued
+    [SerializeField] private Button button;
 
     void Awake()
     {
@@ -42,9 +42,9 @@ public class ActivityButton : MonoBehaviour
 
         // Name
         if (nameLabel != null)
-            nameLabel.text = activity.activityName;
+            nameLabel.text = activity.ActivityName;
 
-        if (!activity.isRestActivity)
+        if (!activity.IsRestActivity)
         {
             float cost = gm.GetEffectiveEnergyCost(activity);
             float delta = gm.GetEffectiveMoodDelta(activity);
@@ -64,7 +64,7 @@ public class ActivityButton : MonoBehaviour
             // Risk icon
             if (riskTierIcon != null)
             {
-                riskTierIcon.sprite = activity.riskTier == RiskTier.High ? highRiskSprite : lowRiskSprite;
+                riskTierIcon.sprite = activity.RiskTier == RiskTier.High ? highRiskSprite : lowRiskSprite;
                 riskTierIcon.gameObject.SetActive(true);
             }
         }
@@ -82,7 +82,7 @@ public class ActivityButton : MonoBehaviour
 
         // Disable button if can't afford
         if (button != null)
-            button.interactable = canAfford || activity.isRestActivity;
+            button.interactable = canAfford || activity.IsRestActivity;
     }
 
     void OnClick()
