@@ -345,7 +345,7 @@ public class UIBuilder : MonoBehaviour
         {
             var iconImg = iconGo.AddComponent<Image>();
             iconImg.sprite = sprite;
-            iconImg.color = txt;
+            iconImg.color = Color.white;
             iconImg.preserveAspect = true;
         }
         else
