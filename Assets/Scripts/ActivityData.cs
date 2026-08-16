@@ -7,29 +7,47 @@ public enum ActivityCategory { Activities, Park, Social, Special }
 public class ActivityData : ScriptableObject
 {
     [Header("Identity")]
-    public string activityName;
-    public ActivityCategory category;
-    public RiskTier riskTier;
+    [SerializeField] private string activityName;
+    [SerializeField] private ActivityCategory category;
+    [SerializeField] private RiskTier riskTier;
 
     [Header("Energy Cost")]
-    public float energyCostBase;       // when willing
-    // energyCostBase * 1.5f when NOT willing (fatigue >= threshold)
+    [SerializeField] private float energyCostBase;       // when willing
+    [SerializeField] private float energyCostUnwilling;  // when NOT willing (fatigue >= threshold)
 
     [Header("Mood Delta")]
-    public float moodDeltaBase;        // when willing
-    // moodDeltaBase * 0.4f when NOT willing
+    [SerializeField] private float moodDeltaBase;         // when willing (positive)
+    [SerializeField] private float moodDeltaUnwilling;     // when NOT willing (negative — the only source of mood decay)
 
     [Header("Fatigue")]
-    public float fatiguePerUse = 30f;
-    public float fatigueRecoveryPerDay = 15f;
-    public float fatigueThreshold = 60f;   // >= this → not willing
+    [SerializeField] private float fatiguePerUse = 30f;
+    [SerializeField] private float fatigueRecoveryPerDay = 15f;
+    [SerializeField] private float fatigueThreshold = 60f;   // >= this → not willing
 
     [Header("Special (Descansar only)")]
-    public bool isRestActivity = false;
-    public float restEnergyRecovery = 20f;     // energy gained
-    public float restMoodPenaltyConsecutive = -3f; // applied if used 2 days in a row
+    [SerializeField] private bool isRestActivity = false;
 
-    [Header("Visuals")]
-    public Sprite activityIcon;
-    [TextArea] public string displayDescription;
+    [Header("Presentation")]
+    [SerializeField] private Sprite activityIcon;
+    [SerializeField] private string animationTrigger;
+    [SerializeField] private AudioClip sfx;
+    [SerializeField] [TextArea] private string flavorText;   // suggests the "place" without navigation
+    [SerializeField] [TextArea] private string displayDescription;
+
+    public string ActivityName { get => activityName; set => activityName = value; }
+    public ActivityCategory Category { get => category; set => category = value; }
+    public RiskTier RiskTier { get => riskTier; set => riskTier = value; }
+    public float EnergyCostBase { get => energyCostBase; set => energyCostBase = value; }
+    public float EnergyCostUnwilling { get => energyCostUnwilling; set => energyCostUnwilling = value; }
+    public float MoodDeltaBase { get => moodDeltaBase; set => moodDeltaBase = value; }
+    public float MoodDeltaUnwilling { get => moodDeltaUnwilling; set => moodDeltaUnwilling = value; }
+    public float FatiguePerUse { get => fatiguePerUse; set => fatiguePerUse = value; }
+    public float FatigueRecoveryPerDay { get => fatigueRecoveryPerDay; set => fatigueRecoveryPerDay = value; }
+    public float FatigueThreshold { get => fatigueThreshold; set => fatigueThreshold = value; }
+    public bool IsRestActivity { get => isRestActivity; set => isRestActivity = value; }
+    public Sprite ActivityIcon { get => activityIcon; set => activityIcon = value; }
+    public string AnimationTrigger { get => animationTrigger; set => animationTrigger = value; }
+    public AudioClip Sfx { get => sfx; set => sfx = value; }
+    public string FlavorText { get => flavorText; set => flavorText = value; }
+    public string DisplayDescription { get => displayDescription; set => displayDescription = value; }
 }

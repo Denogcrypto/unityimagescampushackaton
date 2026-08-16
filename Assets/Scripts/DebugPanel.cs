@@ -12,10 +12,12 @@ public class DebugPanel : MonoBehaviour
     private GUIStyle boxStyle;
     private GUIStyle buttonStyle;
     private bool initialized = false;
+    private int debugTargetDay = 1;
 
     void Start()
     {
         gm = GameManager.Instance;
+        if (gm != null) debugTargetDay = gm.CurrentDay;
     }
 
     void InitStyles()
@@ -42,25 +44,25 @@ public class DebugPanel : MonoBehaviour
 
         float panelX = 10f;
         float panelY = 10f;
-        float w = 220f;
-        float h = 500f;
+        float w = 240f;
+        float h = 780f;
 
         GUI.Box(new Rect(panelX, panelY, w, h), "", boxStyle);
 
         float x = panelX + 10f;
         float y = panelY + 10f;
-        float bh = 50f;
-        float gap = 8f;
+        float bh = 46f;
+        float gap = 6f;
 
         // Status
-        GUI.Label(new Rect(x, y, w - 20, 30), $"Día: {gm.CurrentDay}/{gm.totalDays}", boxStyle);
-        y += 30;
-        GUI.Label(new Rect(x, y, w - 20, 30), $"Ánimo: {gm.Mood:F1}", boxStyle);
-        y += 30;
-        GUI.Label(new Rect(x, y, w - 20, 30), $"Energía: {gm.Energy:F1}", boxStyle);
-        y += 30;
-        GUI.Label(new Rect(x, y, w - 20, 30), $"Inestable: {gm.UnstableDaysStreak}/3", boxStyle);
-        y += 35;
+        GUI.Label(new Rect(x, y, w - 20, 28), $"Día: {gm.CurrentDay}/{gm.TotalDays}", boxStyle);
+        y += 28;
+        GUI.Label(new Rect(x, y, w - 20, 28), $"Ánimo: {gm.Mood:F1}", boxStyle);
+        y += 28;
+        GUI.Label(new Rect(x, y, w - 20, 28), $"Energía: {gm.Energy:F1}", boxStyle);
+        y += 28;
+        GUI.Label(new Rect(x, y, w - 20, 28), $"Inestable: {gm.UnstableDaysStreak}/{gm.MaxUnstableDays}", boxStyle);
+        y += 32;
 
         if (GUI.Button(new Rect(x, y, w - 20, bh), "+10 Ánimo", buttonStyle)) gm.Debug_AddMood();
         y += bh + gap;
@@ -75,6 +77,21 @@ public class DebugPanel : MonoBehaviour
         if (GUI.Button(new Rect(x, y, w - 20, bh), "Ánimo Peligro (20)", buttonStyle)) gm.Debug_MoodDanger();
         y += bh + gap;
         if (GUI.Button(new Rect(x, y, w - 20, bh), "Ánimo Exceso (90)", buttonStyle)) gm.Debug_MoodOverhappy();
+        y += bh + gap;
+        if (GUI.Button(new Rect(x, y, w - 20, bh), "Reset Fatiga", buttonStyle)) gm.Debug_ResetFatigue();
+        y += bh + gap;
+
+        string fluctuationLabel = gm.DisableRandomFluctuation ? "Fluctuación: OFF" : "Fluctuación: ON";
+        if (GUI.Button(new Rect(x, y, w - 20, bh), fluctuationLabel, buttonStyle)) gm.Debug_ToggleFluctuation();
+        y += bh + gap + 6f;
+
+        GUI.Label(new Rect(x, y, w - 20, 28), $"Saltar a día: {debugTargetDay}", boxStyle);
+        y += 32;
+        float halfW = (w - 20 - gap) / 2f;
+        if (GUI.Button(new Rect(x, y, halfW, bh), "-1", buttonStyle)) debugTargetDay = Mathf.Max(1, debugTargetDay - 1);
+        if (GUI.Button(new Rect(x + halfW + gap, y, halfW, bh), "+1", buttonStyle)) debugTargetDay = Mathf.Min(gm.TotalDays, debugTargetDay + 1);
+        y += bh + gap;
+        if (GUI.Button(new Rect(x, y, w - 20, bh), "Saltar", buttonStyle)) gm.Debug_JumpToDay(debugTargetDay);
     }
 #endif
 }

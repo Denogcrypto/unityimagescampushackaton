@@ -11,11 +11,21 @@ public class CharacterAnimator : MonoBehaviour
     public static CharacterAnimator Instance { get; private set; }
 
     [Header("References")]
-    public Animator animator;           // optional Unity Animator
-    public SpriteRenderer characterSprite;
+    [SerializeField] private Animator animator;           // optional Unity Animator
+    [SerializeField] private SpriteRenderer characterSprite;
 
     [Header("Fallback animation")]
-    public float fallbackDuration = 0.8f;   // seconds of fake animation
+    [SerializeField] private float fallbackDuration = 0.8f;   // seconds of fake animation
+
+    [Header("Mood Visual States (placeholder — swap for real art, S12)")]
+    [SerializeField] private Color lowMoodColor = new Color(0.25f, 0.30f, 0.35f);   // apagado (below safe zone)
+    [SerializeField] private Color calmMoodColor = new Color(0.55f, 0.68f, 0.06f);  // estable (safe zone)
+    [SerializeField] private Color highMoodColor = new Color(0.75f, 0.15f, 0.15f);  // acelerado — debe leerse como malo, no feliz
+    [SerializeField] private float accelJitterAmount = 0.06f;
+    [SerializeField] private float accelJitterSpeed = 22f;
+
+    private Vector3 basePosition;
+    private bool isAccelerated;
 
     // Animator parameter names (must match in the Animator Controller)
     private const string TriggerActivity = "PlayActivity";
@@ -27,6 +37,43 @@ public class CharacterAnimator : MonoBehaviour
         Instance = this;
         if (animator == null) animator = GetComponent<Animator>();
         if (characterSprite == null) characterSprite = GetComponent<SpriteRenderer>();
+        if (characterSprite != null) basePosition = characterSprite.transform.localPosition;
+    }
+
+    void Start()
+    {
+        // Subscribing in Start() (not OnEnable/Awake) guarantees GameManager.Instance
+        // is already set, regardless of scene object initialization order.
+        if (GameManager.Instance != null) GameManager.Instance.OnStatsChanged.AddListener(RefreshMoodVisual);
+        RefreshMoodVisual();
+    }
+
+    void OnDestroy()
+    {
+        if (GameManager.Instance != null) GameManager.Instance.OnStatsChanged.RemoveListener(RefreshMoodVisual);
+    }
+
+    /// Placeholder mood readout until real art (S12) lands: tints the sprite and,
+    /// when "acelerado", adds a nervous jitter — the accelerated state must read
+    /// as bad, never as happy.
+    void RefreshMoodVisual()
+    {
+        var gm = GameManager.Instance;
+        if (gm == null || characterSprite == null) return;
+
+        if (gm.Mood < gm.MoodSafeMin) { characterSprite.color = lowMoodColor; isAccelerated = false; }
+        else if (gm.Mood > gm.MoodSafeMax) { characterSprite.color = highMoodColor; isAccelerated = true; }
+        else { characterSprite.color = calmMoodColor; isAccelerated = false; }
+
+        if (!isAccelerated) characterSprite.transform.localPosition = basePosition;
+    }
+
+    void Update()
+    {
+        if (!isAccelerated || characterSprite == null) return;
+        float jx = (Mathf.PerlinNoise(Time.time * accelJitterSpeed, 0f) - 0.5f) * 2f * accelJitterAmount;
+        float jy = (Mathf.PerlinNoise(0f, Time.time * accelJitterSpeed) - 0.5f) * 2f * accelJitterAmount;
+        characterSprite.transform.localPosition = basePosition + new Vector3(jx, jy, 0f);
     }
 
     /// <summary>
@@ -34,6 +81,8 @@ public class CharacterAnimator : MonoBehaviour
     /// </summary>
     public void PlayActivity(ActivityData activity, Action onComplete)
     {
+        if (activity != null) AudioManager.Instance?.PlaySfx(activity.Sfx);
+
         if (animator != null && animator.isActiveAndEnabled)
         {
             StartCoroutine(PlayWithAnimator(activity, onComplete));

@@ -9,15 +9,15 @@ using UnityEngine.UI;
 public class DayTransitionController : MonoBehaviour
 {
     [Header("Panel")]
-    public CanvasGroup canvasGroup;
-    public Text dayLabel;
-    public Text moodStatusLabel;   // "Ánimo estable / inestable"
-    public Text streakLabel;       // "Días inestables: X/3"
+    [SerializeField] private CanvasGroup canvasGroup;
+    [SerializeField] private Text dayLabel;
+    [SerializeField] private Text moodStatusLabel;   // "Ánimo estable / inestable"
+    [SerializeField] private Text streakLabel;       // "Días inestables: X/3"
 
     [Header("Timing")]
-    public float fadeInDuration = 0.3f;
-    public float holdDuration = 1.8f;
-    public float fadeOutDuration = 0.3f;
+    [SerializeField] private float fadeInDuration = 0.3f;
+    [SerializeField] private float holdDuration = 1.8f;
+    [SerializeField] private float fadeOutDuration = 0.3f;
 
     void Start()
     {
@@ -41,13 +41,13 @@ public class DayTransitionController : MonoBehaviour
         if (dayLabel != null)
             dayLabel.text = $"Fin del día {gm.CurrentDay}";
 
-        bool stable = gm.Mood >= gm.moodSafeMin && gm.Mood <= gm.moodSafeMax;
+        bool stable = gm.Mood >= gm.MoodSafeMin && gm.Mood <= gm.MoodSafeMax;
         if (moodStatusLabel != null)
             moodStatusLabel.text = stable ? "✓ Ánimo estable" : "✗ Ánimo inestable";
 
         if (streakLabel != null)
             streakLabel.text = gm.UnstableDaysStreak > 0
-                ? $"Días inestables: {gm.UnstableDaysStreak}/{gm.maxUnstableDays}"
+                ? $"Días inestables: {gm.UnstableDaysStreak}/{gm.MaxUnstableDays}"
                 : "";
 
         // Fade in

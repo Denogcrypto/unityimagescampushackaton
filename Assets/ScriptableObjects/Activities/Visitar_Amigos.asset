@@ -16,12 +16,15 @@ MonoBehaviour:
   category: 2
   riskTier: 1
   energyCostBase: 32
+  energyCostUnwilling: 44
   moodDeltaBase: 20
+  moodDeltaUnwilling: -12
   fatiguePerUse: 30
   fatigueRecoveryPerDay: 15
   fatigueThreshold: 60
   isRestActivity: 0
-  restEnergyRecovery: 20
-  restMoodPenaltyConsecutive: -3
   activityIcon: {fileID: 0}
+  animationTrigger: 
+  sfx: {fileID: 0}
+  flavorText: 
   displayDescription: "Alto impacto \xB7 Correcci\xF3n r\xE1pida, riesgo de sobrepaso"
