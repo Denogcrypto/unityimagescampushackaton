@@ -279,27 +279,27 @@ public class UIBuilder : MonoBehaviour
 
         // Contenedor de las 4 celdas en grilla 2x2
         // Fila superior
-        MakeGridButton("ACTIVIDADES", "[ACT]", false, p,
+        MakeGridButton("ACTIVIDADES", "arcade-machine", false, p,
             new Vector2(0, 0.5f), new Vector2(0.5f, 1f), 4,
             () => ShowPanel(activitiesPanel));
 
-        MakeGridButton("PARQUE", "[PAR]", false, p,
+        MakeGridButton("PARQUE", "tree", false, p,
             new Vector2(0.5f, 0.5f), new Vector2(1f, 1f), 4,
             () => ShowPanel(parkPanel));
 
         // Fila inferior
-        MakeGridButton("SOCIAL", "[SOC]", false, p,
+        MakeGridButton("SOCIAL", "feedback-emoji", false, p,
             new Vector2(0, 0), new Vector2(0.5f, 0.5f), 4,
             () => ShowPanel(socialPanel));
 
-        MakeGridButton("DESCANSAR", "[ZZZ]", true, p,
+        MakeGridButton("DESCANSAR", "youtube", true, p,
             new Vector2(0.5f, 0), new Vector2(1f, 0.5f), 4,
             () => OnActivityClicked(actDescansar));
 
         return panel;
     }
 
-    void MakeGridButton(string label, string icon, bool highlighted,
+    void MakeGridButton(string label, string iconName, bool highlighted,
         Transform parent, Vector2 anchorMin, Vector2 anchorMax, float padding,
         System.Action onClick)
     {
@@ -330,18 +330,43 @@ public class UIBuilder : MonoBehaviour
             outline.effectDistance = new Vector2(1.5f, -1.5f);
         }
 
-        // Ícono (mitad superior)
-        var iconT = MakeText("Icon", go.transform, icon, 26, txt, FontStyle.Normal);
-        iconT.rectTransform.anchorMin = new Vector2(0, 0.5f);
-        iconT.rectTransform.anchorMax = Vector2.one;
-        iconT.rectTransform.offsetMin = Vector2.zero;
-        iconT.rectTransform.offsetMax = Vector2.zero;
-        iconT.alignment = TextAnchor.MiddleCenter;
+        // Ícono como sprite (mitad superior)
+        var iconGo = new GameObject("Icon");
+        iconGo.transform.SetParent(go.transform, false);
+        var iconRt = iconGo.AddComponent<RectTransform>();
+        iconRt.anchorMin = new Vector2(0.15f, 0.4f);
+        iconRt.anchorMax = new Vector2(0.85f, 0.95f);
+        iconRt.offsetMin = Vector2.zero;
+        iconRt.offsetMax = Vector2.zero;
 
-        // Label (mitad inferior)
+        // Cargar sprite desde Resources/Icons/
+        var sprite = Resources.Load<Sprite>($"Icons/{iconName}");
+        if (sprite != null)
+        {
+            var iconImg = iconGo.AddComponent<Image>();
+            iconImg.sprite = sprite;
+            iconImg.color = txt;
+            iconImg.preserveAspect = true;
+        }
+        else
+        {
+            // Fallback: texto centrado
+            var fallback = iconGo.AddComponent<Text>();
+            fallback.text = iconName.Length >= 3
+                ? iconName.Substring(0, 3).ToUpper()
+                : iconName.ToUpper();
+            fallback.fontSize = 20;
+            fallback.color = txt;
+            fallback.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            fallback.alignment = TextAnchor.MiddleCenter;
+            fallback.horizontalOverflow = HorizontalWrapMode.Overflow;
+            fallback.verticalOverflow = VerticalWrapMode.Overflow;
+        }
+
+        // Label (parte inferior)
         var labelT = MakeText("Label", go.transform, label, 11, txt, FontStyle.Bold);
-        labelT.rectTransform.anchorMin = Vector2.zero;
-        labelT.rectTransform.anchorMax = new Vector2(1, 0.5f);
+        labelT.rectTransform.anchorMin = new Vector2(0, 0);
+        labelT.rectTransform.anchorMax = new Vector2(1, 0.4f);
         labelT.rectTransform.offsetMin = Vector2.zero;
         labelT.rectTransform.offsetMax = Vector2.zero;
         labelT.alignment = TextAnchor.MiddleCenter;
