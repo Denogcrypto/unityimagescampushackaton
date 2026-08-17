@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
-/// Minimal SFX/music wrapper (S13 placeholder). PlaySfx is already wired from
-/// CharacterAnimator.PlayActivity — assign AudioClips on ActivityData once the
-/// designer delivers them and sound starts playing with no further code changes.
+/// Minimal SFX/music singleton. Background music loops from Start; every
+/// Button in the scene (active or not) gets the click SFX wired automatically,
+/// so new buttons don't need manual hookup. PlaySfx is also available for
+/// other callers (e.g. CharacterAnimator.PlayActivity) once activity clips exist.
 /// </summary>
 public class AudioManager : MonoBehaviour
 {
@@ -15,6 +17,9 @@ public class AudioManager : MonoBehaviour
 
     [Header("Music")]
     [SerializeField] private AudioClip musicLoop;
+
+    [Header("UI")]
+    [SerializeField] private AudioClip buttonClickClip;
 
     void Awake()
     {
@@ -36,7 +41,18 @@ public class AudioManager : MonoBehaviour
             musicSource.clip = musicLoop;
             musicSource.Play();
         }
+
+        HookButtonClickSfx();
     }
+
+    void HookButtonClickSfx()
+    {
+        var buttons = FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (var button in buttons)
+            button.onClick.AddListener(PlayButtonClick);
+    }
+
+    public void PlayButtonClick() => PlaySfx(buttonClickClip);
 
     public void PlaySfx(AudioClip clip)
     {

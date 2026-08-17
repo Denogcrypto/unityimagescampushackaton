@@ -9,24 +9,32 @@ public class GameManager : MonoBehaviour
 
     // ─── Config ──────────────────────────────────────────────────
     [Header("Day Settings")]
-    public int totalDays = 30;
+    [SerializeField] private int totalDays = 30;
 
     [Header("Mood Settings")]
-    [Range(0, 100)] public float moodInitial = 50f;
-    [Range(0, 100)] public float moodSafeMin = 30f;
-    [Range(0, 100)] public float moodSafeMax = 75f;
-    public float moodFluctuationMin = -8f;
-    public float moodFluctuationMax = 8f;
+    [Range(0, 100)] [SerializeField] private float moodInitial = 50f;
+    [Range(0, 100)] [SerializeField] private float moodSafeMin = 30f;
+    [Range(0, 100)] [SerializeField] private float moodSafeMax = 75f;
+    [SerializeField] private float moodFluctuationMin = -8f;
+    [SerializeField] private float moodFluctuationMax = 8f;
 
     [Header("Energy Settings")]
-    public float energyRecoveryMin = 40f;
-    public float energyRecoveryMax = 100f;
+    [SerializeField] private float energyRecoveryMin = 40f;
+    [SerializeField] private float energyRecoveryMax = 100f;
 
     [Header("Defeat Condition")]
-    public int maxUnstableDays = 3;
+    [SerializeField] private int maxUnstableDays = 3;
 
     [Header("Activities (assign all ActivityData assets)")]
-    public List<ActivityData> allActivities = new List<ActivityData>();
+    [SerializeField] private List<ActivityData> allActivities = new List<ActivityData>();
+
+    // Config is set at design time via the Inspector; expose it read-only so
+    // no runtime script can mutate shared rules (e.g. totalDays) mid-game.
+    public int TotalDays => totalDays;
+    public float MoodSafeMin => moodSafeMin;
+    public float MoodSafeMax => moodSafeMax;
+    public int MaxUnstableDays => maxUnstableDays;
+    public IReadOnlyList<ActivityData> AllActivities => allActivities;
 
     // ─── Runtime State ───────────────────────────────────────────
     public int CurrentDay { get; private set; } = 1;
@@ -47,12 +55,22 @@ public class GameManager : MonoBehaviour
     private HashSet<string> activitiesUsedToday = new HashSet<string>();
 
     // ─── Events ──────────────────────────────────────────────────
-    public UnityEvent OnDayStarted = new UnityEvent();
-    public UnityEvent OnDayEnded = new UnityEvent();
-    public UnityEvent OnActivityApplied = new UnityEvent();
-    public UnityEvent OnGameOver = new UnityEvent();
-    public UnityEvent OnVictory = new UnityEvent();
-    public UnityEvent OnStatsChanged = new UnityEvent();
+    // Backing fields are private so external code can only AddListener/RemoveListener,
+    // never reassign the event (e.g. "OnDayStarted = new UnityEvent()"), which would
+    // silently drop every existing subscriber.
+    [SerializeField] private UnityEvent onDayStarted = new UnityEvent();
+    [SerializeField] private UnityEvent onDayEnded = new UnityEvent();
+    [SerializeField] private UnityEvent onActivityApplied = new UnityEvent();
+    [SerializeField] private UnityEvent onGameOver = new UnityEvent();
+    [SerializeField] private UnityEvent onVictory = new UnityEvent();
+    [SerializeField] private UnityEvent onStatsChanged = new UnityEvent();
+
+    public UnityEvent OnDayStarted => onDayStarted;
+    public UnityEvent OnDayEnded => onDayEnded;
+    public UnityEvent OnActivityApplied => onActivityApplied;
+    public UnityEvent OnGameOver => onGameOver;
+    public UnityEvent OnVictory => onVictory;
+    public UnityEvent OnStatsChanged => onStatsChanged;
 
     // ─── Init ────────────────────────────────────────────────────
     void Awake()
@@ -63,7 +81,7 @@ public class GameManager : MonoBehaviour
         // Initialize fatigue for all activities
         foreach (var act in allActivities)
             if (act != null)
-                fatigueMap[act.activityName] = 0f;
+                fatigueMap[act.ActivityName] = 0f;
     }
 
     void Start()
@@ -81,22 +99,22 @@ public class GameManager : MonoBehaviour
     public float GetFatigue(ActivityData activity)
     {
         if (activity == null) return 0f;
-        return fatigueMap.TryGetValue(activity.activityName, out float f) ? f : 0f;
+        return fatigueMap.TryGetValue(activity.ActivityName, out float f) ? f : 0f;
     }
 
     /// Returns true if the character is NOT willing to do the activity.
     public bool IsNotWilling(ActivityData activity)
     {
-        if (activity == null || activity.isRestActivity) return false;
-        return GetFatigue(activity) >= activity.fatigueThreshold;
+        if (activity == null || activity.IsRestActivity) return false;
+        return GetFatigue(activity) >= activity.FatigueThreshold;
     }
 
     /// Effective energy cost considering willingness.
     public float GetEffectiveEnergyCost(ActivityData activity)
     {
         if (activity == null) return 0f;
-        if (activity.isRestActivity) return 0f;
-        float cost = activity.energyCostBase;
+        if (activity.IsRestActivity) return 0f;
+        float cost = activity.EnergyCostBase;
         if (IsNotWilling(activity)) cost *= 1.5f;
         return cost;
     }
@@ -105,8 +123,8 @@ public class GameManager : MonoBehaviour
     public float GetEffectiveMoodDelta(ActivityData activity)
     {
         if (activity == null) return 0f;
-        if (activity.isRestActivity) return 0f;
-        float delta = activity.moodDeltaBase;
+        if (activity.IsRestActivity) return 0f;
+        float delta = activity.MoodDeltaBase;
         if (IsNotWilling(activity)) delta *= 0.4f;
         return delta;
     }
@@ -125,13 +143,13 @@ public class GameManager : MonoBehaviour
     {
         if (activity == null || IsGameOver || IsVictory) return;
 
-        if (activity.isRestActivity)
+        if (activity.IsRestActivity)
         {
             // Descansar: recover energy, end the day
             float moodChange = 0f;
-            if (restUsedYesterday) moodChange = activity.restMoodPenaltyConsecutive;
+            if (restUsedYesterday) moodChange = activity.RestMoodPenaltyConsecutive;
 
-            Energy = Mathf.Clamp(Energy + activity.restEnergyRecovery, 0f, 100f);
+            Energy = Mathf.Clamp(Energy + activity.RestEnergyRecovery, 0f, 100f);
             Mood = Mathf.Clamp(Mood + moodChange, 0f, 100f);
 
             restUsedToday = true;
@@ -150,12 +168,12 @@ public class GameManager : MonoBehaviour
         Mood = Mathf.Clamp(Mood + moodDelta, 0f, 100f);
 
         // Apply fatigue
-        if (!fatigueMap.ContainsKey(activity.activityName))
-            fatigueMap[activity.activityName] = 0f;
-        fatigueMap[activity.activityName] = Mathf.Min(
-            fatigueMap[activity.activityName] + activity.fatiguePerUse, 100f);
+        if (!fatigueMap.ContainsKey(activity.ActivityName))
+            fatigueMap[activity.ActivityName] = 0f;
+        fatigueMap[activity.ActivityName] = Mathf.Min(
+            fatigueMap[activity.ActivityName] + activity.FatiguePerUse, 100f);
 
-        activitiesUsedToday.Add(activity.activityName);
+        activitiesUsedToday.Add(activity.ActivityName);
 
         OnActivityApplied.Invoke();
         OnStatsChanged.Invoke();
@@ -202,11 +220,11 @@ public class GameManager : MonoBehaviour
         // Fatigue recovery for unused activities
         foreach (var act in allActivities)
         {
-            if (act == null || act.isRestActivity) continue;
-            if (!activitiesUsedToday.Contains(act.activityName))
+            if (act == null || act.IsRestActivity) continue;
+            if (!activitiesUsedToday.Contains(act.ActivityName))
             {
-                float key = fatigueMap.TryGetValue(act.activityName, out float f) ? f : 0f;
-                fatigueMap[act.activityName] = Mathf.Max(0f, key - act.fatigueRecoveryPerDay);
+                float key = fatigueMap.TryGetValue(act.ActivityName, out float f) ? f : 0f;
+                fatigueMap[act.ActivityName] = Mathf.Max(0f, key - act.FatigueRecoveryPerDay);
             }
         }
 

@@ -72,10 +72,10 @@ public class UIBuilder : MonoBehaviour
     void CacheActivities()
     {
         var gm = GameManager.Instance;
-        foreach (var a in gm.allActivities)
+        foreach (var a in gm.AllActivities)
         {
             if (a == null) continue;
-            switch (a.activityName)
+            switch (a.ActivityName)
             {
                 case "Leer":             actLeer      = a; break;
                 case "Pasear":           actPasear    = a; break;
@@ -484,8 +484,8 @@ public class UIBuilder : MonoBehaviour
         tierT.alignment = TextAnchor.MiddleRight;
 
         // Costo
-        float cost = data != null ? data.energyCostBase : 0;
-        float delta = data != null ? data.moodDeltaBase : 0;
+        float cost = data != null ? data.EnergyCostBase : 0;
+        float delta = data != null ? data.MoodDeltaBase : 0;
         var costT = MakeText("Cost", bt, $"⚡ {cost:F0}   +{delta:F0} 😊", 11, TextDim, FontStyle.Normal);
         costT.rectTransform.anchorMin = new Vector2(0, 0);
         costT.rectTransform.anchorMax = new Vector2(1, 0.5f);
@@ -602,7 +602,7 @@ public class UIBuilder : MonoBehaviour
         if (energySlider) energySlider.value = gm.Energy / 100f;
         if (moodText)     moodText.text   = $"😊 {gm.Mood:F0}";
         if (energyText)   energyText.text = $"⚡ {gm.Energy:F0}";
-        if (dayText)      dayText.text    = $"DÍA {gm.CurrentDay}/{gm.totalDays}";
+        if (dayText)      dayText.text    = $"DÍA {gm.CurrentDay}/{gm.TotalDays}";
 
         if (streakText)
         {
@@ -614,7 +614,7 @@ public class UIBuilder : MonoBehaviour
         // Color de barra de ánimo: verde si safe, rojo si fuera
         if (moodFill)
         {
-            bool safe = gm.Mood >= gm.moodSafeMin && gm.Mood <= gm.moodSafeMax;
+            bool safe = gm.Mood >= gm.MoodSafeMin && gm.Mood <= gm.MoodSafeMax;
             moodFill.color = safe ? Neon : Hex("#FF4444");
         }
     }
@@ -643,7 +643,7 @@ public class UIBuilder : MonoBehaviour
     {
         if (activity == null) return;
         var gm = GameManager.Instance;
-        if (!activity.isRestActivity && !gm.CanAfford(activity)) return;
+        if (!activity.IsRestActivity && !gm.CanAfford(activity)) return;
 
         var anim = CharacterAnimator.Instance;
         if (anim != null)

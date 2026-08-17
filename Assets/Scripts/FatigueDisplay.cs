@@ -7,11 +7,11 @@ using UnityEngine.UI;
 /// </summary>
 public class FatigueDisplay : MonoBehaviour
 {
-    public ActivityData activity;
-    public Slider fatigueSlider;
-    public Image fillImage;
-    public Color willingColor = new Color(0.3f, 0.9f, 0.3f);   // green
-    public Color notWillingColor = new Color(0.9f, 0.3f, 0.3f); // red
+    [SerializeField] private ActivityData activity;
+    [SerializeField] private Slider fatigueSlider;
+    [SerializeField] private Image fillImage;
+    [SerializeField] private Color willingColor = new Color(0.3f, 0.9f, 0.3f);    // green
+    [SerializeField] private Color notWillingColor = new Color(0.9f, 0.3f, 0.3f); // red
 
     void OnEnable() => Refresh();
 

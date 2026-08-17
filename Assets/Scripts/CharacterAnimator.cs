@@ -11,11 +11,11 @@ public class CharacterAnimator : MonoBehaviour
     public static CharacterAnimator Instance { get; private set; }
 
     [Header("References")]
-    public Animator animator;           // optional Unity Animator
-    public SpriteRenderer characterSprite;
+    [SerializeField] private Animator animator;           // optional Unity Animator
+    [SerializeField] private SpriteRenderer characterSprite;
 
     [Header("Fallback animation")]
-    public float fallbackDuration = 0.8f;   // seconds of fake animation
+    [SerializeField] private float fallbackDuration = 0.8f; // seconds of fake animation
 
     // Animator parameter names (must match in the Animator Controller)
     private const string TriggerActivity = "PlayActivity";

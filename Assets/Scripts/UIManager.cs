@@ -10,38 +10,38 @@ public class UIManager : MonoBehaviour
 {
     // ─── HUD References ──────────────────────────────────────────
     [Header("HUD")]
-    public Slider moodBar;
-    public Slider energyBar;
-    public Text dayLabel;          // "Day X / 30"
-    public Text moodValueLabel;    // optional numeric display
-    public Text energyValueLabel;
+    [SerializeField] private Slider moodBar;
+    [SerializeField] private Slider energyBar;
+    [SerializeField] private Text dayLabel;          // "Day X / 30"
+    [SerializeField] private Text moodValueLabel;    // optional numeric display
+    [SerializeField] private Text energyValueLabel;
 
     [Header("Mood Bar Safe Zone Markers")]
-    public RectTransform safeZoneMarkerLeft;   // positioned at 30% of bar width
-    public RectTransform safeZoneMarkerRight;  // positioned at 75% of bar width
+    [SerializeField] private RectTransform safeZoneMarkerLeft;  // positioned at 30% of bar width
+    [SerializeField] private RectTransform safeZoneMarkerRight; // positioned at 75% of bar width
 
     [Header("Unstable Day Warning")]
-    public GameObject unstableWarningPanel;    // shown when streak > 0
-    public Text unstableStreakLabel; // "⚠ X/3 días inestables"
+    [SerializeField] private GameObject unstableWarningPanel; // shown when streak > 0
+    [SerializeField] private Text unstableStreakLabel;        // "⚠ X/3 días inestables"
 
     // ─── Menu Panels ─────────────────────────────────────────────
     [Header("Menu Panels")]
-    public GameObject mainMenuPanel;
-    public GameObject activitiesPanel;
-    public GameObject parkPanel;
-    public GameObject socialPanel;
+    [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private GameObject activitiesPanel;
+    [SerializeField] private GameObject parkPanel;
+    [SerializeField] private GameObject socialPanel;
 
     // ─── Activity Buttons ────────────────────────────────────────
     [Header("Activity Buttons (assign in Inspector)")]
-    public List<ActivityButton> activityButtons = new List<ActivityButton>();
+    [SerializeField] private List<ActivityButton> activityButtons = new List<ActivityButton>();
 
     // ─── Overlays ────────────────────────────────────────────────
     [Header("Overlays")]
-    public GameObject dayTransitionPanel;
-    public Text dayTransitionLabel;  // "Día X"
-    public GameObject gameOverPanel;
-    public Text gameOverLabel;
-    public GameObject victoryPanel;
+    [SerializeField] private GameObject dayTransitionPanel;
+    [SerializeField] private Text dayTransitionLabel; // "Día X"
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private Text gameOverLabel;
+    [SerializeField] private GameObject victoryPanel;
 
     // ─── Animation lock ──────────────────────────────────────────
     private bool waitingForAnimation = false;
@@ -61,6 +61,11 @@ public class UIManager : MonoBehaviour
         ShowMainMenu();
         RefreshHUD();
         SetSafeZoneMarkers();
+
+        // Restart buttons live inside gameOverPanel/victoryPanel and aren't
+        // wired in the Inspector, so hook them up here.
+        gameOverPanel?.GetComponentInChildren<Button>(true)?.onClick.AddListener(RestartGame);
+        victoryPanel?.GetComponentInChildren<Button>(true)?.onClick.AddListener(RestartGame);
     }
 
     // ─── HUD ─────────────────────────────────────────────────────
@@ -71,7 +76,7 @@ public class UIManager : MonoBehaviour
 
         if (moodBar != null)    moodBar.value = gm.Mood / 100f;
         if (energyBar != null)  energyBar.value = gm.Energy / 100f;
-        if (dayLabel != null)   dayLabel.text = $"Día {gm.CurrentDay} / {gm.totalDays}";
+        if (dayLabel != null)   dayLabel.text = $"Día {gm.CurrentDay} / {gm.TotalDays}";
         if (moodValueLabel != null)   moodValueLabel.text = $"{gm.Mood:F0}";
         if (energyValueLabel != null) energyValueLabel.text = $"{gm.Energy:F0}";
 
@@ -79,7 +84,7 @@ public class UIManager : MonoBehaviour
         if (unstableWarningPanel != null)
             unstableWarningPanel.SetActive(gm.UnstableDaysStreak > 0);
         if (unstableStreakLabel != null)
-            unstableStreakLabel.text = $"⚠ {gm.UnstableDaysStreak}/{gm.maxUnstableDays} días inestables";
+            unstableStreakLabel.text = $"⚠ {gm.UnstableDaysStreak}/{gm.MaxUnstableDays} días inestables";
 
         // Refresh button states
         RefreshActivityButtons();
@@ -89,8 +94,8 @@ public class UIManager : MonoBehaviour
     {
         if (moodBar == null) return;
         float barWidth = moodBar.GetComponent<RectTransform>().rect.width;
-        float safeMinPct = GameManager.Instance.moodSafeMin / 100f;
-        float safeMaxPct = GameManager.Instance.moodSafeMax / 100f;
+        float safeMinPct = GameManager.Instance.MoodSafeMin / 100f;
+        float safeMaxPct = GameManager.Instance.MoodSafeMax / 100f;
 
         if (safeZoneMarkerLeft != null)
             safeZoneMarkerLeft.anchoredPosition = new Vector2(barWidth * safeMinPct, 0);
@@ -153,10 +158,10 @@ public class UIManager : MonoBehaviour
         var gm = GameManager.Instance;
         if (gm.IsGameOver || gm.IsVictory) return;
 
-        if (!activity.isRestActivity && !gm.CanAfford(activity))
+        if (!activity.IsRestActivity && !gm.CanAfford(activity))
         {
             // Could flash an error here
-            Debug.Log($"[UI] No energy for {activity.activityName}");
+            Debug.Log($"[UI] No energy for {activity.ActivityName}");
             return;
         }
 

@@ -46,13 +46,16 @@ public static class ActivityDataGenerator
 
         // Descansar (special)
         var rest = ScriptableObject.CreateInstance<ActivityData>();
-        rest.activityName = "Descansar";
-        rest.category = ActivityCategory.Special;
-        rest.riskTier = RiskTier.Low;
-        rest.isRestActivity = true;
-        rest.restEnergyRecovery = 20f;
-        rest.restMoodPenaltyConsecutive = -3f;
-        rest.displayDescription = "Especial · Recupera +20 energía y termina el día. Penalización si se usa 2 días seguidos.";
+        var restSo = new SerializedObject(rest);
+        restSo.FindProperty("activityName").stringValue = "Descansar";
+        restSo.FindProperty("category").enumValueIndex = (int)ActivityCategory.Special;
+        restSo.FindProperty("riskTier").enumValueIndex = (int)RiskTier.Low;
+        restSo.FindProperty("isRestActivity").boolValue = true;
+        restSo.FindProperty("restEnergyRecovery").floatValue = 20f;
+        restSo.FindProperty("restMoodPenaltyConsecutive").floatValue = -3f;
+        restSo.FindProperty("displayDescription").stringValue =
+            "Especial · Recupera +20 energía y termina el día. Penalización si se usa 2 días seguidos.";
+        restSo.ApplyModifiedPropertiesWithoutUndo();
         SaveAsset(rest, "Descansar");
 
         AssetDatabase.SaveAssets();
@@ -67,15 +70,17 @@ public static class ActivityDataGenerator
         string description)
     {
         var asset = ScriptableObject.CreateInstance<ActivityData>();
-        asset.activityName = name;
-        asset.category = category;
-        asset.riskTier = risk;
-        asset.energyCostBase = energyCost;
-        asset.moodDeltaBase = moodDelta;
-        asset.fatiguePerUse = fatiguePerUse;
-        asset.fatigueRecoveryPerDay = fatigueRecovery;
-        asset.fatigueThreshold = threshold;
-        asset.displayDescription = description;
+        var so = new SerializedObject(asset);
+        so.FindProperty("activityName").stringValue = name;
+        so.FindProperty("category").enumValueIndex = (int)category;
+        so.FindProperty("riskTier").enumValueIndex = (int)risk;
+        so.FindProperty("energyCostBase").floatValue = energyCost;
+        so.FindProperty("moodDeltaBase").floatValue = moodDelta;
+        so.FindProperty("fatiguePerUse").floatValue = fatiguePerUse;
+        so.FindProperty("fatigueRecoveryPerDay").floatValue = fatigueRecovery;
+        so.FindProperty("fatigueThreshold").floatValue = threshold;
+        so.FindProperty("displayDescription").stringValue = description;
+        so.ApplyModifiedPropertiesWithoutUndo();
         SaveAsset(asset, name.Replace(" ", "_"));
     }
 
