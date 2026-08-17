@@ -15,6 +15,6 @@ MonoBehaviour:
   displayName: Ir a un recital
   category: 2
   impact: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 09de7d760e0db4745a42e68b3aaba161, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}

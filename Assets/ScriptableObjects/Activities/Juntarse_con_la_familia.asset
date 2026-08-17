@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49665c30c54891847a4a906c61b46c0f, type: 3}
   m_Name: Juntarse_con_la_familia
   m_EditorClassIdentifier: Assembly-CSharp::ActivityData
-  displayName: Juntarse con la familia
+  displayName: Ver a la familia
   category: 2
   impact: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 10aee74d9e5b8ca43985bfc52731173d, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}

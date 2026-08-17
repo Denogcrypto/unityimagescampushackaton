@@ -15,6 +15,6 @@ MonoBehaviour:
   displayName: "Escuchar m\xFAsica"
   category: 0
   impact: 0
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 50c3a7a1730bd4742a8420c72cc3f6c4, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}

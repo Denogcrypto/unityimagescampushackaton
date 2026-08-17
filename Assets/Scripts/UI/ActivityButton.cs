@@ -18,6 +18,8 @@ public class ActivityButton : MonoBehaviour
     [SerializeField] private Image riskTierIcon; // patrón de dither por impacto (S9, 4.12 — no color)
     [SerializeField] private Button button;
 
+    public ActivityCategory Category => activity != null ? activity.Category : default;
+
     void Awake()
     {
         if (button == null) button = GetComponent<Button>();

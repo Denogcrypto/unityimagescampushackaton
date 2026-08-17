@@ -10,18 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49665c30c54891847a4a906c61b46c0f, type: 3}
-  m_Name: Ejercicio_Intenso
+  m_Name: Salir_con_amigos
   m_EditorClassIdentifier: Assembly-CSharp::ActivityData
-  activityName: Ejercicio Intenso
-  category: 0
-  riskTier: 1
-  energyCostBase: 38
-  moodDeltaBase: 18
-  fatiguePerUse: 30
-  fatigueRecoveryPerDay: 15
-  fatigueThreshold: 60
-  isRestActivity: 0
-  restEnergyRecovery: 20
-  restMoodPenaltyConsecutive: -3
-  activityIcon: {fileID: 0}
-  displayDescription: "Alto impacto \xB7 Correcci\xF3n r\xE1pida, riesgo de sobrepaso"
+  displayName: Salir con amigos
+  category: 2
+  impact: 1
+  icon: {fileID: 21300000, guid: 029673693bddc3f4c9fb5fa011393929, type: 3}
+  animationTrigger: 
+  sfx: {fileID: 0}

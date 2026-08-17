@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49665c30c54891847a4a906c61b46c0f, type: 3}
-  m_Name: Ordenar_y_limpiar
+  m_Name: caminar_parque
   m_EditorClassIdentifier: Assembly-CSharp::ActivityData
-  displayName: Ordenar y limpiar
-  category: 0
-  impact: 2
-  icon: {fileID: 21300000, guid: bca036fd35e480447b5a402d83958faf, type: 3}
+  displayName: Ir a caminar por el parque
+  category: 1
+  impact: 0
+  icon: {fileID: 21300000, guid: cccd3971dbd51a845b232fd641138c7e, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}

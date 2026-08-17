@@ -136,13 +136,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActivityButton
   activity: {fileID: 11400000, guid: 94d944f0915f32b4f88709100747cd88, type: 2}
-  nameLabel: {fileID: 7209580361054996148}
-  costLabel: {fileID: 0}
-  moodDeltaLabel: {fileID: 0}
+  nameLabel: {fileID: 0}
+  icon: {fileID: 0}
   riskTierIcon: {fileID: 6605295307800077837}
-  lowRiskSprite: {fileID: 21300000, guid: d786bc361b061074ba694a64edae5f1c, type: 3}
-  highRiskSprite: {fileID: 21300000, guid: ca2268841087b6440a206367a7bd68a9, type: 3}
-  notWillingOverlay: {fileID: 0}
   button: {fileID: 0}
 --- !u!1 &4833287388286946257
 GameObject:
@@ -161,7 +157,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2063782221171857080
 RectTransform:
   m_ObjectHideFlags: 0

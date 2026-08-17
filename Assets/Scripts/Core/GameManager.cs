@@ -74,6 +74,7 @@ public class GameManager : MonoBehaviour
     public Zone GetStatZone(StatId id) => stats.GetZone(id);
     public float GetStatDistance(StatId id) => stats.Distance(id);
     public bool IsCriticalStatAboveZone(StatId id) => stats.IsCloserToUpperBorder(id);
+    public StatId GetCriticalStat() => stats.GetCriticalStat();
 
     /// S5 paso 1: solo valida partida activa, acciones < tope, energía > 0.
     /// El costo real (estrella/calavera) no se conoce hasta resolver la
