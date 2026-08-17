@@ -53,6 +53,23 @@ public class GameManager : MonoBehaviour
         dayCycle.StartFirstDay();
     }
 
+    /// Reinicia la partida entera al día 1 (pedido explícito del usuario —
+    /// el brief marca "reinicio de partida" fuera de scope, pero acá se
+    /// habilita desde la pantalla de terapeuta). Recrea los sistemas desde
+    /// cero, igual que Awake, así no queda estado viejo (fluctuación
+    /// deshabilitada por debug, diasRegulado acumulado, etc.).
+    public void ResetGame()
+    {
+        stats = new StatSystem(config);
+        energy = new EnergySystem(config);
+        weekSummary = new WeekSummary(config, therapistLines);
+        dayCycle = new DayCycle(config, stats, energy, weekSummary);
+        resolver = new ActivityResolver(config, stats, energy);
+        actionsUsedToday = 0;
+
+        dayCycle.StartFirstDay();
+    }
+
     public float GetStat(StatId id) => stats.Get(id);
     public Zone GetStatZone(StatId id) => stats.GetZone(id);
     public float GetStatDistance(StatId id) => stats.Distance(id);

@@ -29,9 +29,17 @@ public class DayTransitionController : MonoBehaviour, IPointerClickHandler
 
     void Awake()
     {
-        if (canvasGroup != null) canvasGroup.alpha = 0f;
+        // No desactivamos el GameObject: si lo hiciéramos, Start() nunca
+        // correría y esto nunca se suscribiría a OnDayClosed (bug real que
+        // tenía este panel — quedaba invisible para siempre). Se oculta
+        // solo con CanvasGroup, dejando el objeto activo todo el tiempo.
+        if (canvasGroup != null)
+        {
+            canvasGroup.alpha = 0f;
+            canvasGroup.blocksRaycasts = false;
+            canvasGroup.interactable = false;
+        }
         if (streakLabel != null) streakLabel.text = "";
-        gameObject.SetActive(false);
     }
 
     void Start()
@@ -60,7 +68,7 @@ public class DayTransitionController : MonoBehaviour, IPointerClickHandler
     IEnumerator Sequence()
     {
         skipRequested = false;
-        gameObject.SetActive(true);
+        if (canvasGroup != null) { canvasGroup.blocksRaycasts = true; canvasGroup.interactable = true; }
 
         yield return Fade(0f, 1f, fadeDuration);
 
@@ -72,7 +80,7 @@ public class DayTransitionController : MonoBehaviour, IPointerClickHandler
         }
 
         yield return Fade(1f, 0f, fadeDuration);
-        gameObject.SetActive(false);
+        if (canvasGroup != null) { canvasGroup.blocksRaycasts = false; canvasGroup.interactable = false; }
     }
 
     IEnumerator Fade(float from, float to, float duration)

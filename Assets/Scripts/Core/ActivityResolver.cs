@@ -56,12 +56,20 @@ public class ActivityResolver
             : config.CostoCalavera(activity.Impact);
         energy.Spend(costo);
 
-        GameEvents.RaiseActivityResolved(activity, result);
-
         if (activity.Category != ActivityCategory.Casa)
             GameEvents.RaiseBackgroundChangeRequested(ActivityCategory.Casa);
 
+        // IsBusy=false y onComplete (que cuenta la acción, recalcula ánimo/
+        // crítico y puede cerrar el día — pasos 10-11) van ANTES de emitir
+        // OnActivityResolved. Bug real que tenía esto al revés: UIManager
+        // escucha OnActivityResolved para refrescar los botones, y si ese
+        // evento se dispara con IsBusy todavía en true, CanRequestActivity
+        // da false para las 9 actividades y el refresh que las reactiva
+        // nunca vuelve a correr — quedan bloqueadas hasta que se fuerza un
+        // cierre de día. Descansar no se ve afectado porque su Button no
+        // pasa por este mismo refresh.
         IsBusy = false;
         onComplete?.Invoke();
+        GameEvents.RaiseActivityResolved(activity, result);
     }
 }

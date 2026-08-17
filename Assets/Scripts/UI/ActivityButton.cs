@@ -14,6 +14,7 @@ public class ActivityButton : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private Text nameLabel;
     [SerializeField] private Image icon;
+    [SerializeField] private Image riskTierIcon; // patrón de dither por impacto (S9, 4.12 — no color)
     [SerializeField] private Button button;
 
     void Awake()
@@ -30,6 +31,15 @@ public class ActivityButton : MonoBehaviour
 
         if (nameLabel != null) nameLabel.text = activity.DisplayName;
         if (icon != null && activity.Icon != null) icon.sprite = activity.Icon;
+
+        if (riskTierIcon != null)
+        {
+            // Simple (no Tiled): a este tamaño de ícono, tilear el patrón 4×4
+            // lo repite tantas veces que Medio y Alto se ven igual de "sólidos".
+            // Estirado una sola vez se distinguen los 3 niveles a simple vista.
+            riskTierIcon.type = Image.Type.Simple;
+            riskTierIcon.sprite = DitherPattern.Get(activity.Impact);
+        }
 
         if (button != null)
             button.interactable = GameManager.Instance.CanRequestActivity(activity);
