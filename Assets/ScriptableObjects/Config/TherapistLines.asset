@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c05efa8a5f1431940b6b22ce0622c987, type: 3}
+  m_Name: TherapistLines
+  m_EditorClassIdentifier: Assembly-CSharp::TherapistLines
+  mensajeTodosMejorado: "Esta semana estuviste muy bien acompa\xF1ado de vos mismo.
+    Sigamos as\xED."
+  mensajeMejoradoInestableSinDescuidado: Hubo avances esta semana, aunque no en todo.
+    Es un buen punto de partida.
+  mensajeUnDescuidado: "Fue una semana dif\xEDcil. No pasa nada, para eso seguimos
+    viniendo ac\xE1."
+  mensajeDosOTresDescuidado: "Esta semana cost\xF3 sostener el equilibrio. Vamos
+    a seguir trabajando en esto juntos."
+  lineaMejorado: "{stat} mejor\xF3 esta semana."
+  lineaInestable: '{stat} estuvo inestable, subiendo y bajando de zona.'
+  lineaDescuidado: "{stat} qued\xF3 descuidado casi toda la semana."

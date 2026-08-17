@@ -1,30 +1,6 @@
-using UnityEngine;
-using UnityEngine.UI;
-
-/// <summary>
-/// Optional: shows a fatigue bar under each activity button.
-/// Attach to a child Image of the ActivityButton and assign the activity.
-/// </summary>
-public class FatigueDisplay : MonoBehaviour
-{
-    [SerializeField] private ActivityData activity;
-    [SerializeField] private Slider fatigueSlider;
-    [SerializeField] private Image fillImage;
-    [SerializeField] private Color willingColor = new Color(0.3f, 0.9f, 0.3f);    // green
-    [SerializeField] private Color notWillingColor = new Color(0.9f, 0.3f, 0.3f); // red
-
-    void OnEnable() => Refresh();
-
-    public void Refresh()
-    {
-        if (activity == null || fatigueSlider == null) return;
-        var gm = GameManager.Instance;
-        if (gm == null) return;
-
-        float fatigue = gm.GetFatigue(activity);
-        fatigueSlider.value = fatigue / 100f;
-
-        if (fillImage != null)
-            fillImage.color = gm.IsNotWilling(activity) ? notWillingColor : willingColor;
-    }
-}
+// Archivado — sistema de fatiga derogado por el Brief v2 (sección 2).
+// Contenido completo conservado en Assets/_Deprecated/FatigueDisplay.cs.txt.
+// Este archivo se dejó vacío en su ubicación original (en vez de moverlo)
+// porque el movimiento generaba una caché de compilación (Bee) inconsistente
+// que Unity no invalidaba sin un Reimport All completo. Sin uso, no compila
+// ninguna clase.

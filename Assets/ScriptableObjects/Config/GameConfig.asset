@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f29cd0b08965b5043af00c2e016e4450, type: 3}
+  m_Name: GameConfig
+  m_EditorClassIdentifier: Assembly-CSharp::GameConfig
+  totalDias: 7
+  statInicialVidaSocial: 50
+  statInicialAutoestima: 50
+  statInicialActividadFisica: 50
+  zonaBajoMax: 35
+  zonaAltoMin: 70
+  dispersionFactor: 0.3
+  animoDepresivoMax: 20
+  animoTristeMax: 40
+  animoNeutralMax: 60
+  animoFelizMax: 80
+  deltaBajo: 5
+  deltaMedio: 10
+  deltaAlto: 15
+  costoEstrellaBajo: 0
+  costoEstrellaMedio: 5
+  costoEstrellaAlto: 10
+  costoCalaveraBajo: 10
+  costoCalaveraMedio: 20
+  costoCalaveraAlto: 30
+  topeAcciones: 4
+  energiaInicialDepresivo: {x: 15, y: 25}
+  energiaInicialTriste: {x: 25, y: 45}
+  energiaInicialNeutral: {x: 45, y: 65}
+  energiaInicialFeliz: {x: 65, y: 85}
+  energiaInicialAlterado: {x: 85, y: 100}
+  multEnergiaDepresivo: 0.4
+  multEnergiaTriste: 0.6
+  multEnergiaNeutral: 0.8
+  multEnergiaFeliz: 1
+  multEnergiaAlterado: 1.1
+  energiaMinima: 15
+  decaimientoDiario: 10
+  fluctuacionMin: 5
+  fluctuacionMax: 8
+  diasReguladoParaMejorado: 5
+  diasReguladoParaInestable: 3
