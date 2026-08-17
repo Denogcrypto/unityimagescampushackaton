@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class ActivityButton : MonoBehaviour
     [SerializeField] private ActivityData activity;
 
     [Header("UI Elements")]
-    [SerializeField] private Text nameLabel;
+    [SerializeField] private TMP_Text nameLabel;
     [SerializeField] private Image icon;
     [SerializeField] private Image riskTierIcon; // patrón de dither por impacto (S9, 4.12 — no color)
     [SerializeField] private Button button;

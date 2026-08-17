@@ -3,10 +3,12 @@ using System.Collections;
 
 /// <summary>
 /// Resuelve una actividad en el orden estricto de S5: valida, bloquea input
-/// (vía IsBusy), calcula distancia_antes, pide cambio de fondo, corre
-/// animación + SFX, aplica el delta, calcula distancia_despues y determina
-/// estrella/calavera (4.4, con &lt;=, no &lt;), descuenta el costo, emite el
-/// evento de resultado, vuelve el fondo a Casa y desbloquea input.
+/// (vía IsBusy), calcula distancia_antes, muestra el popup de feedback con
+/// el ícono de la actividad (reemplaza el cambio de fondo por categoría de
+/// S12 — sin arte de fondos todavía, pedido explícito del usuario), aplica
+/// el delta, calcula distancia_despues y determina estrella/calavera (4.4,
+/// con &lt;=, no &lt;), descuenta el costo, emite el evento de resultado y
+/// desbloquea input.
 ///
 /// Recalcular ánimo/ícono crítico y chequear cierre forzado (pasos 10-11)
 /// quedan del lado de GameManager en el callback onComplete: son estado
@@ -34,18 +36,11 @@ public class ActivityResolver
     {
         IsBusy = true;
 
-        if (activity.Category != ActivityCategory.Casa)
-            GameEvents.RaiseBackgroundChangeRequested(activity.Category);
-
         float distanciaAntes = stats.Distance(activity.AffectedStat);
 
-        var animator = CharacterAnimator.Instance;
-        if (animator != null)
-        {
-            bool done = false;
-            animator.PlayActivity(activity, () => done = true);
-            while (!done) yield return null;
-        }
+        var popup = ActivityPopupUI.Instance;
+        if (popup != null)
+            yield return popup.Play(activity);
 
         stats.Apply(activity.AffectedStat, config.Delta(activity.Impact));
         float distanciaDespues = stats.Distance(activity.AffectedStat);
@@ -55,9 +50,6 @@ public class ActivityResolver
             ? config.CostoEstrella(activity.Impact)
             : config.CostoCalavera(activity.Impact);
         energy.Spend(costo);
-
-        if (activity.Category != ActivityCategory.Casa)
-            GameEvents.RaiseBackgroundChangeRequested(ActivityCategory.Casa);
 
         // IsBusy=false y onComplete (que cuenta la acción, recalcula ánimo/
         // crítico y puede cerrar el día — pasos 10-11) van ANTES de emitir

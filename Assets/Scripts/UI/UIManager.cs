@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class UIManager : MonoBehaviour
     [Header("HUD (oculto siempre, ver 4.12)")]
     [SerializeField] private Slider moodBar;
     [SerializeField] private Slider energyBar;
-    [SerializeField] private Text dayLabel;
+    [SerializeField] private TMP_Text dayLabel;
 
     [Header("Menú de actividades (S9 — plano)")]
     [SerializeField] private GameObject activityMenuPanel;

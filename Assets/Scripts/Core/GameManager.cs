@@ -123,7 +123,15 @@ public class GameManager : MonoBehaviour
         var (raw, state) = MoodSystem.Compute(
             stats.Get(StatId.VidaSocial), stats.Get(StatId.Autoestima), stats.Get(StatId.ActividadFisica), config);
         GameEvents.RaiseMoodComputed(state, Mathf.RoundToInt(raw));
-        GameEvents.RaiseCriticalStatChanged(stats.GetCriticalStat());
+
+        // 4.9: el ícono de stat crítico no se muestra el día 1. DayCycle.
+        // StartFirstDay() ya respeta esto al arrancar el día, pero este
+        // método también corre después de CADA actividad resuelta (no solo
+        // al inicio de día) — sin este chequeo, la nube de pensamiento
+        // mostraba el ícono crítico apenas se resolvía la primera acción
+        // del día 1, aunque nadie lo hubiera disparado todavía.
+        if (dayCycle.CurrentDay > 1)
+            GameEvents.RaiseCriticalStatChanged(stats.GetCriticalStat());
     }
 
     // ─── Debug helpers (usados por DebugPanel, S14) ────────────────

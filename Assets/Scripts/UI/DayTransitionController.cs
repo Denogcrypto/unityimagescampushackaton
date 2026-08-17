@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,9 +17,9 @@ public class DayTransitionController : MonoBehaviour, IPointerClickHandler
 {
     [Header("Panel")]
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Text dayLabel;         // ahora: ícono ("ZZZ" / batería)
-    [SerializeField] private Text moodStatusLabel;  // ahora: mensaje ("Hora de descansar" / "Sin energía…")
-    [SerializeField] private Text streakLabel;       // sin uso — el streak de inestabilidad quedó derogado
+    [SerializeField] private TMP_Text dayLabel;         // ahora: ícono ("ZZZ" / batería)
+    [SerializeField] private TMP_Text moodStatusLabel;  // ahora: mensaje ("Hora de descansar" / "Sin energía…")
+    [SerializeField] private TMP_Text streakLabel;       // sin uso — el streak de inestabilidad quedó derogado
 
     [Header("Timing")]
     [SerializeField] private float fadeDuration = 0.25f;
@@ -55,7 +56,9 @@ public class DayTransitionController : MonoBehaviour, IPointerClickHandler
     public void Show(DayCloseReason reason)
     {
         if (dayLabel != null)
-            dayLabel.text = reason == DayCloseReason.Voluntario ? "ZZZ" : "🔋✕";
+            // "×" en vez del emoji de batería original: la fuente pixel SDF
+            // no tiene glifos de emoji, solo el set de caracteres del .ttf.
+            dayLabel.text = reason == DayCloseReason.Voluntario ? "ZZZ" : "×";
         if (moodStatusLabel != null)
             moodStatusLabel.text = reason == DayCloseReason.Voluntario ? "Hora de descansar" : "Sin energía…";
 

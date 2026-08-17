@@ -12,16 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49665c30c54891847a4a906c61b46c0f, type: 3}
   m_Name: Leer
   m_EditorClassIdentifier: Assembly-CSharp::ActivityData
-  activityName: Leer
+  displayName: 
   category: 0
-  riskTier: 0
-  energyCostBase: 15
-  moodDeltaBase: 6
-  fatiguePerUse: 30
-  fatigueRecoveryPerDay: 15
-  fatigueThreshold: 60
-  isRestActivity: 0
-  restEnergyRecovery: 20
-  restMoodPenaltyConsecutive: -3
-  activityIcon: {fileID: 0}
-  displayDescription: "Bajo impacto \xB7 Lento pero seguro"
+  impact: 0
+  icon: {fileID: 21300000, guid: 2ade427efc85f9042ae5b80378e77d57, type: 3}
+  animationTrigger: 
+  sfx: {fileID: 0}

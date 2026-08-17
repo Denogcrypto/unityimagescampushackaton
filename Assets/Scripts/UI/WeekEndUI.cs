@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,8 +16,8 @@ public class WeekEndUI : MonoBehaviour
 {
     [Header("Panel")]
     [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private Text generalMessageLabel;
-    [SerializeField] private Text statLinesLabel;
+    [SerializeField] private TMP_Text generalMessageLabel;
+    [SerializeField] private TMP_Text statLinesLabel;
     [SerializeField] private Button resetButton;
 
     [Header("Timing")]

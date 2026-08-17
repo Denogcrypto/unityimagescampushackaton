@@ -15,6 +15,6 @@ MonoBehaviour:
   displayName: Ordenar y limpiar
   category: 0
   impact: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: bca036fd35e480447b5a402d83958faf, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}

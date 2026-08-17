@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,13 +22,13 @@ public class ThoughtBubbleUI : MonoBehaviour
 
     [Header("Ánimo — 5 estados (orden: Depresivo,Triste,Neutral,Feliz,Alterado)")]
     [SerializeField] private Image moodIcon;
-    [SerializeField] private Text moodLabel; // placeholder hasta S12
+    [SerializeField] private TMP_Text moodLabel; // placeholder hasta S12
     [SerializeField] private Sprite[] moodSprites = new Sprite[5];
 
     [Header("Stat crítico — 3 stats (orden: VidaSocial,Autoestima,ActividadFisica) + flecha")]
     [SerializeField] private GameObject criticalStatRoot;
     [SerializeField] private Image criticalStatIcon;
-    [SerializeField] private Text criticalStatLabel; // placeholder hasta S12
+    [SerializeField] private TMP_Text criticalStatLabel; // placeholder hasta S12
     [SerializeField] private Image arrowIcon;
     [SerializeField] private Sprite[] statSprites = new Sprite[3];
     [SerializeField] private Sprite arrowSprite; // una sola flecha; se espeja para "abajo" (4.9)

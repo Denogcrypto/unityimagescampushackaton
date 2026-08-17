@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05efa8a5f1431940b6b22ce0622c987, type: 3}
   m_Name: TherapistLines
   m_EditorClassIdentifier: Assembly-CSharp::TherapistLines
-  mensajeTodosMejorado: "Esta semana estuviste muy bien acompa\xF1ado de vos mismo.
+  mensajeTodosMejorado: "Esta semana estuviste muy bien acompanado de vos mismo.
     Sigamos as\xED."
   mensajeMejoradoInestableSinDescuidado: Hubo avances esta semana, aunque no en todo.
     Es un buen punto de partida.

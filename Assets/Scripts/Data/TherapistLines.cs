@@ -12,7 +12,7 @@ public class TherapistLines : ScriptableObject
     [Header("Mensaje general según combinación (4.11)")]
     [TextArea]
     [SerializeField] private string mensajeTodosMejorado =
-        "Esta semana estuviste muy bien acompañado de vos mismo. Sigamos así.";
+        "Esta semana estuviste muy bien acompanado de vos mismo. Sigamos así.";
     [TextArea]
     [SerializeField] private string mensajeMejoradoInestableSinDescuidado =
         "Hubo avances esta semana, aunque no en todo. Es un buen punto de partida.";

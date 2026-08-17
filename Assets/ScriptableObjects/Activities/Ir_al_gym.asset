@@ -15,6 +15,6 @@ MonoBehaviour:
   displayName: Ir al gym
   category: 1
   impact: 2
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2c67241f880d3924face3a0c65a4d9d7, type: 3}
   animationTrigger: 
   sfx: {fileID: 0}
